@@ -1,0 +1,71 @@
+<section class="card">
+  <header class="card__header">
+    <h1 class="card__title">Reportar problema</h1>
+    <p class="card__subtitle">Descreva o problema e anexe fotos, se necessário.</p>
+  </header>
+
+  <form class="field" [formGroup]="issueForm">
+    <label class="field__label" for="issue-description">Descrição do problema</label>
+    <textarea
+      class="field__input"
+      id="issue-description"
+      formControlName="issueDescription"
+      rows="6"
+      placeholder="Ex.: buraco na pista, próximo à esquina."
+    ></textarea>
+  </form>
+
+  <div class="camera">
+    <div class="camera__preview">
+      <video #video autoplay playsinline muted [hidden]="!camera.hasAccess()"></video>
+      @if (!camera.hasAccess()) {
+        <span class="camera__placeholder">Câmera desligada</span>
+      }
+    </div>
+    <canvas #canvas hidden></canvas>
+
+    @if (camera.error()) {
+      <p class="alert" role="alert">{{ camera.error() }}</p>
+    }
+
+    <div class="camera__actions">
+      <button
+        class="btn btn--secondary"
+        type="button"
+        (click)="toggleCamera()"
+        [attr.aria-pressed]="camera.hasAccess()"
+      >
+        {{ camera.hasAccess() ? 'Fechar câmera' : 'Abrir câmera' }}
+      </button>
+      <button
+        class="btn btn--primary"
+        type="button"
+        (click)="takePicture()"
+        [disabled]="!camera.hasAccess()"
+      >
+        Tirar foto
+      </button>
+    </div>
+  </div>
+
+  @if (camera.filesNames().length) {
+    <div class="photos">
+      <h2 class="photos__title">Fotos anexadas ({{ camera.filesNames().length }})</h2>
+      <ul class="photos__list">
+        @for (fileName of camera.filesNames(); track fileName) {
+          <li class="photos__item">
+            <span class="photos__name">{{ fileName }}</span>
+            <button
+              class="btn-icon"
+              type="button"
+              (click)="camera.removeFile(fileName)"
+              [attr.aria-label]="'Remover ' + fileName"
+            >
+              ×
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</section>
