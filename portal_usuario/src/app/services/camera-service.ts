@@ -1,4 +1,4 @@
-import { computed, ElementRef, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +13,7 @@ export class CameraService {
   readonly error = this._error.asReadonly();
   readonly hasAccess = computed(() => this._stream() !== null);
   readonly filesNames = computed(() => this._files().map((file) => file.name));
+  readonly hasFiles = computed(() => this._files().length > 0);
 
   async start(): Promise<void> {
     if (this._stream()) return;

@@ -46,6 +46,17 @@
         Tirar foto
       </button>
     </div>
+
+    <div class="camera__actions">
+      <button
+        class="btn btn--primary"
+        type="button"
+        (click)="postIssueRegistration()"
+        [disabled]="!geolocation.hasCoords() || !camera.hasFiles()"
+      >
+        Enviar
+      </button>
+    </div>
   </div>
 
   @if (camera.filesNames().length) {
